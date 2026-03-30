@@ -1,4 +1,4 @@
-= Workshop Overview: The ParasolCloud Challenge
+= Workshop overview: the ParasolCloud challenge
 :toc:
 :toc-placement: preamble
 :icons: font
@@ -14,14 +14,14 @@ ParasolCloud is experiencing rapid growth, but there's a problem threatening cus
 **The situation:**
 
 * **Current deployment**: Single vLLM instance serving an AI customer service chatbot
-* **The problem**: Slow, unpredictable response times during peak hours—especially for 5-10% of users
+* **The problem**: Slow, unpredictable response times during peak hours -especially for 5-10% of users
 * **Business impact**: Customer complaints about "the bot takes forever to respond" are increasing
 * **Upcoming deadline**: Major client expansion launching in 90 days will 4x traffic
 * **Risk**: Current infrastructure can't scale without making the worst-case user experience even worse
 
 **What your manager said:**
 
-"We're getting complaints about slow responses during peak hours—our most frustrated customers are waiting too long. Our current single-instance vLLM deployment isn't delivering consistent performance. We need you to evaluate llm-d to see if it can reduce tail latency and give our worst-case users a better experience."
+"We're getting complaints about slow responses during peak hours -our most frustrated customers are waiting too long. Our current single-instance vLLM deployment isn't delivering consistent performance. We need you to evaluate llm-d to see if it can reduce tail latency and give our worst-case users a better experience."
 
 The executive team wants data: **Can we scale without making our slowest users even more frustrated?**
 
@@ -29,7 +29,7 @@ The executive team wants data: **Can we scale without making our slowest users e
 
 Evaluate whether **llm-d** (an intelligent orchestration layer for distributed LLM inference) can solve ParasolCloud's tail latency problem.
 
-**Key question to answer**: Can llm-d deliver consistently low latency—especially for the 5-10% of users currently experiencing the worst performance?
+**Key question to answer**: Can llm-d deliver consistently low latency -especially for the 5-10% of users currently experiencing the worst performance?
 
 == Why this matters
 
@@ -44,8 +44,8 @@ Without intelligent routing, each GPU maintains its own isolated KV cache. Simil
 
 **The workshop approach**:
 
-* **Module 2**: Short 30-second run on a single GPU—illustrative, not for comparison
-* **Module 3**: Full 300-second run on 4 GPUs with naive round-robin routing—your comparison baseline
-* **Module 4**: Full 300-second run on the same 4 GPUs with llm-d routing—measure the P95 TTFT improvement
+* **Module 2**: Short 30-second run on a single GPU -illustrative, not for comparison
+* **Module 3**: Full 300-second run on 4 GPUs with naive round-robin routing -your comparison baseline
+* **Module 4**: Full 300-second run on the same 4 GPUs with llm-d routing -measure the P95 TTFT improvement
 
 **Your job**: Generate the data and compare the numbers.

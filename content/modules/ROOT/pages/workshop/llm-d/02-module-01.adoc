@@ -1,4 +1,4 @@
-= Module 1: Introduction & Core Concepts
+= Module 1: Introduction & core concepts
 :source-highlighter: rouge
 :toc: macro
 :toclevels: 2
@@ -31,7 +31,7 @@ While it runs, continue reading the concepts below. We'll test the deployment at
 First, confirm your OpenShift AI environment is ready:
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 # Verify you're logged into OpenShift
 oc whoami
@@ -59,7 +59,7 @@ ip-10-0-47-154.us-east-2.compute.internal   Ready    control-plane,master,worker
 KServe uses ServingRuntimes to define how models are served. Create a vLLM-based ServingRuntime configuration:
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 cat << 'EOF' | oc apply -f-
 apiVersion: serving.kserve.io/v1alpha1
@@ -115,7 +115,7 @@ EOF
 Now deploy the Llama 3.1 8B model using the vLLM runtime:
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 cat << 'EOF' | oc apply -f-
 apiVersion: serving.kserve.io/v1beta1
@@ -158,7 +158,7 @@ EOF
 Start watching the deployment status, then continue reading:
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 # Watch InferenceService status - press Ctrl+C when it shows READY=True
 oc get inferenceservice llama-vllm-single -w
@@ -192,7 +192,7 @@ When a user submits a prompt to a language model, inference happens in two disti
 * Lower parallelism - less GPU efficient
 * Happens repeatedly until response completes
 
-**Why this matters for latency**: These phases have different computational characteristics. Prefill is parallel and compute-intensive—but large prompts can block other requests from starting (head-of-line blocking). Decode is sequential and memory-bandwidth intensive. When a large prompt queues behind other long-running requests, that user experiences high P95/P99 latency.
+**Why this matters for latency**: These phases have different computational characteristics. Prefill is parallel and compute-intensive -but large prompts can block other requests from starting (head-of-line blocking). Decode is sequential and memory-bandwidth intensive. When a large prompt queues behind other long-running requests, that user experiences high P95/P99 latency.
 
 === The KV cache: Memory for attention
 
@@ -228,7 +228,7 @@ Three bottlenecks drive high P95/P99 latency in multi-GPU LLM deployments:
 
 * **Prefill queuing**: Large prompts block smaller requests from starting (head-of-line blocking). A user with a small prompt who submits just after a large-prompt request can experience 3x higher TTFT simply due to queuing.
 * **KV cache misses**: With round-robin routing, requests with shared prefixes land on different vLLM instances, forcing each to recompute the same system prompt or conversation history from scratch on every turn.
-* **Unpredictable queue depth**: Random routing ignores how busy each instance actually is. P50 latency may be 200ms while P95 reaches 2000ms—a 10x gap.
+* **Unpredictable queue depth**: Random routing ignores how busy each instance actually is. P50 latency may be 200ms while P95 reaches 2000ms -a 10x gap.
 
 === Key performance metrics for tail latency
 
@@ -398,7 +398,7 @@ Your model deployment should be ready by now. Let's verify it's working correctl
 === Check deployment status
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 # Check the InferenceService is ready
 oc get inferenceservice llama-vllm-single
@@ -418,7 +418,7 @@ llama-vllm-single   http://llama-vllm-single-predictor.llm-d-project.svc.cluster
 Port-forward to the instance and test it:
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 # Port forward to the pod
 oc port-forward deployment/llama-vllm-single-predictor 8000:8000 &
@@ -432,7 +432,7 @@ Press **Enter** to get back to the command prompt after starting the port-forwar
 Check the models endpoint:
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 # Check the list of models
 curl http://localhost:8000/v1/models | jq .
@@ -463,7 +463,7 @@ Example output:
 Now test inference:
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 # Send a test request to the model
 curl http://localhost:8000/v1/completions \
@@ -502,7 +502,7 @@ Your single vLLM instance is up and running successfully!
 
 [NOTE]
 ====
-Keep the port-forward running—you'll need it in the next module to verify the metrics endpoint.
+Keep the port-forward running -you'll need it in the next module to verify the metrics endpoint.
 ====
 
 == Module 1 summary
@@ -516,7 +516,7 @@ Keep the port-forward running—you'll need it in the next module to verify the 
 
 * P95/P99 TTFT represents the experience of your most frustrated users
 * Three bottlenecks drive tail latency: prefill queuing, KV cache misses, and unpredictable queue depth
-* More GPUs increase capacity but do **not** reduce tail latency—cache misses still occur with round-robin routing
+* More GPUs increase capacity but do **not** reduce tail latency -cache misses still occur with round-robin routing
 * llm-d's prefix-cache-aware routing routes similar requests to the same instance, eliminating redundant prefill computation and reducing P95/P99 TTFT
 
 **Next steps:**

@@ -1,10 +1,10 @@
-= Module 2: Observe Single-GPU Behaviour
+= Module 2: Observe single-GPU behaviour
 :source-highlighter: rouge
 :toc: macro
 :toclevels: 2
 
 In this module you'll look at the vLLM metrics endpoint, open the Grafana dashboard, and run a short illustrative benchmark to see how a single GPU handles high concurrency.
-These results are for observation only—the comparison benchmarks run in Modules 3 and 4.
+These results are for observation only -the comparison benchmarks run in Modules 3 and 4.
 
 == Learning objectives
 
@@ -33,7 +33,7 @@ Your port-forward from Module 1 should still be running. If it's no longer activ
 ====
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 # Fetch metrics
 curl http://localhost:8000/metrics | grep vllm | head -40
@@ -47,7 +47,7 @@ You should see a lot of vLLM-specific metrics, including:
 * `vllm:generation_tokens_total`
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 # Stop port-forward when ready
 pkill -f "port-forward"
@@ -58,7 +58,7 @@ pkill -f "port-forward"
 Your workshop environment should have a pre-configured Grafana instance. Access it:
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 # Get Grafana route
 route=$(oc get route grafana-route -n grafana -ojsonpath='{.status.ingress[0].host}')
@@ -76,11 +76,15 @@ Login with your OpenShift credentials.
 * **Password:** {openshift_cluster_admin_password}
 ====
 
+=== Verify
+
+Confirm you can see the Grafana dashboard and that the vLLM data source is active. You should see panels for TTFT, KV cache usage, and GPU utilization  - even if they show no data yet.
+
 == Exercise 2: Run GuideLLM benchmark
 
 Now establish your performance baseline by running GuideLLM with a KV-cache-aware prompts file.
 Unlike synthetic random prompts, this dataset contains carefully constructed prompts sized to 80% of the model's KV cache capacity, with each prompt repeated multiple times.
-This workload is designed to produce high cache hit rates when requests are routed intelligently—making it ideal for comparing vLLM versus llm-d.
+This workload is designed to produce high cache hit rates when requests are routed intelligently -making it ideal for comparing vLLM versus llm-d.
 
 === Understand the benchmark data
 
@@ -89,7 +93,7 @@ Your lab environment has a pre-provisioned PVC (`benchmark-data`) containing a `
 Verify the PVC and data are available:
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 # Verify the benchmark-data PVC exists
 oc get pvc benchmark-data
@@ -105,12 +109,12 @@ You should see the number of rows in the CSV and the header line showing `prompt
 
 === Run the benchmark
 
-This is a short, illustrative run—just 30 seconds per concurrency level—to show how a single GPU handles a large volume of concurrent requests.
+This is a short, illustrative run -just 30 seconds per concurrency level -to show how a single GPU handles a large volume of concurrent requests.
 We are not collecting these results for later comparison; that happens in Module 3 with 4 replicas running a full 300-second benchmark.
 The goal here is simply to observe what happens when one GPU gets overloaded.
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 cat << 'EOF' | oc apply -f-
 apiVersion: batch/v1
@@ -174,7 +178,7 @@ EOF
 Follow the benchmark logs:
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 oc wait --for=condition=ready pod -l job-name=guidellm-vllm-single --timeout=120s
 oc logs -f job/guidellm-vllm-single
@@ -204,11 +208,11 @@ While the benchmark runs, open your Grafana dashboard and watch:
 2. **KV cache hit rate**: With random round-robin routing, cache hits are low even with repeated prompts
 3. **GPU utilization**: The single GPU will saturate quickly at high concurrency
 
-image::benchmark-dashboard-single.png[]
+image::benchmark-dashboard-single.png[Screenshot of the Grafana dashboard showing single-GPU benchmark metrics,link=self,window=blank]
 
-=== Observe the results
+=== Verify
 
-Focus on the **`ℹ Request Latency Statistics (Completed Requests)`** section—specifically the `TTFT` and `Request Latency` columns.
+Focus on the **`ℹ Request Latency Statistics (Completed Requests)`** section -specifically the `TTFT` and `Request Latency` columns.
 Both the median and p95 TTFT are very high: the single GPU is already deeply queued within the first 30 seconds.
 
 Example output:
@@ -227,7 +231,7 @@ Example output:
 |============|=========|========|========|========|=======|=======|=======|=======|
 ----
 
-These numbers are erratic and very high—requests are queuing behind each other's long prefill computations.
+These numbers are erratic and very high -requests are queuing behind each other's long prefill computations.
 We won't carry these forward for comparison. Module 3 scales to 4 replicas and runs a proper 300-second benchmark.
 
 == Module 2 summary
@@ -239,7 +243,7 @@ We won't carry these forward for comparison. Module 3 scales to 4 replicas and r
 
 **Key takeaways:**
 
-* A single GPU saturates quickly at high concurrency—latency becomes erratic and very high
+* A single GPU saturates quickly at high concurrency -latency becomes erratic and very high
 * This was illustrative only: the short run duration means the numbers are not statistically meaningful for comparison
 * The proper comparison benchmarks (300 seconds each) begin in Module 3
 

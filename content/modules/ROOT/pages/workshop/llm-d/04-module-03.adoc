@@ -1,4 +1,4 @@
-= Module 3: Scale vLLM & Establish Comparison Baseline
+= Module 3: Scale vLLM & establish comparison baseline
 :source-highlighter: rouge
 :toc: macro
 :toclevels: 2
@@ -25,7 +25,7 @@ with each replica running on its own GPU.
 First, remove your single-GPU deployment:
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 # Delete previous InferenceService
 oc delete inferenceservice llama-vllm-single
@@ -44,7 +44,7 @@ inferenceservice.serving.kserve.io "llama-vllm-single" deleted
 Create an InferenceService with 4 replicas for naive horizontal scaling:
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 cat << 'EOF' | oc apply -f-
 apiVersion: serving.kserve.io/v1beta1
@@ -100,7 +100,7 @@ As before, you can follow along in OpenShift AI's dashboard if you like.
 Watch the InferenceService status:
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 # Check all pods (should see 4 replicas)
 oc get pods -l serving.kserve.io/inferenceservice=llama-vllm-scaled -w
@@ -151,10 +151,14 @@ The models are being loaded into VRAM, along with CUDA graphs and preallocating 
 You can also check the logs to see vLLM come ready to serve:
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 oc logs -l serving.kserve.io/inferenceservice=llama-vllm-scaled --all-containers -f  --max-log-requests 12
 ----
+
+=== Verify
+
+Confirm all 4 pods show `READY` as `2/2` and `STATUS` as `Running` before proceeding.
 
 === Load balancing setup
 
@@ -164,7 +168,7 @@ For benchmarking we need a standard ClusterIP service that distributes requests 
 Create one now:
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 cat << 'EOF' | oc apply -f-
 apiVersion: v1
@@ -193,20 +197,20 @@ service/llama-vllm-scaled-lb created
 
 Run GuideLLM against the 4-replica vLLM deployment with a full **300-second** run per concurrency level.
 These are the results you will carry forward and compare against llm-d in Module 4.
-Focus on the **`ℹ Request Latency Statistics (Completed Requests)`** table at the end of the output—specifically `Request Latency` (Mdn/p95 in seconds) and `TTFT` (Mdn/p95 in milliseconds).
+Focus on the **`ℹ Request Latency Statistics (Completed Requests)`** table at the end of the output -specifically `Request Latency` (Mdn/p95 in seconds) and `TTFT` (Mdn/p95 in milliseconds).
 
 === Access Grafana
 
 Refresh the dashboard and select `llama-vllm-scaled` from the model pulldown to scope graphs to these pods:
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 route=$(oc get route grafana-route -n grafana -ojsonpath='{.status.ingress[0].host}')
 echo "https://$route/d/llm-performance/llm-d-performance-dashboard"
 ----
 
-image::grafana-model-pulldown.png[]
+image::grafana-model-pulldown.png[Grafana model selector pulldown showing llama-vllm-scaled,link=self,window=blank]
 
 === Run the benchmark
 
@@ -217,7 +221,7 @@ You may want to press `Enter` occasionally to prevent the Showroom environment f
 ====
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 cat << 'EOF' | oc apply -f-
 apiVersion: batch/v1
@@ -293,9 +297,11 @@ oc get job guidellm-vllm-scaled
 ====
 
 While this runs, open the Grafana dashboard.
-Watch the **KV cache hit rate**: with round-robin routing across 4 replicas, each replica sees only 25% of repeated prompts—the other three cache opportunities are wasted.
+Watch the **KV cache hit rate**: with round-robin routing across 4 replicas, each replica sees only 25% of repeated prompts -the other three cache opportunities are wasted.
 
-image::benchmark-dashboard-scaled.png[]
+image::benchmark-dashboard-scaled.png[Screenshot of the Grafana dashboard showing scaled vLLM benchmark metrics,link=self,window=blank]
+
+=== Verify
 
 When the benchmark finishes, focus on the **`ℹ Request Latency Statistics (Completed Requests)`** table.
 Example:
@@ -316,11 +322,11 @@ Example:
 
 == Exercise 3: Record your results
 
-Note the **TTFT p95** values for concurrency 32 and 64 from your run—you will compare these directly against Module 4.
+Note the **TTFT p95** values for concurrency 32 and 64 from your run -you will compare these directly against Module 4.
 
 The p95 TTFT at concurrency 64 will be high: many seconds.
 Throughput is 4x higher than a single GPU, but tail latency has barely moved.
-The prompts file was designed to be cacheable—but with 4 replicas and round-robin routing, there is only a 1-in-4 chance of hitting the right replica's cache.
+The prompts file was designed to be cacheable -but with 4 replicas and round-robin routing, there is only a 1-in-4 chance of hitting the right replica's cache.
 
 The hardware is there. The routing intelligence is not. That changes in Module 4.
 
@@ -335,7 +341,7 @@ The hardware is there. The routing intelligence is not. That changes in Module 4
 **Key takeaway:**
 
 More GPUs increase capacity, but isolated KV caches and random routing keep P95/P99 TTFT high.
-The prompts are cacheable—the routing just can't exploit that.
+The prompts are cacheable -the routing just can't exploit that.
 
 **Next steps:**
 

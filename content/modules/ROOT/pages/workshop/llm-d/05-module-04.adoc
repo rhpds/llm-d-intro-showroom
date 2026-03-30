@@ -1,4 +1,4 @@
-= Module 4: Deploy llm-d & Benchmark
+= Module 4: Deploy llm-d & benchmark
 :source-highlighter: rouge
 :toc: macro
 :toclevels: 2
@@ -20,7 +20,7 @@ By the end of this module, you'll be able to:
 First, remove your inference service deployment, because llm-d will manage the vLLM deployment now.
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 # Delete previous InferenceService
 oc delete inferenceservice llama-vllm-scaled
@@ -34,7 +34,7 @@ oc get inferenceservice
 First of all a GatewayClass and a Gateway for the inference service should be created.
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 cat << 'EOF' | oc apply -f-
 ---
@@ -67,7 +67,7 @@ EOF
 Create the llm-d configuration with 4 replicas and prefix-cache-aware routing:
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 cat << 'EOF' | oc apply -f-
 apiVersion: serving.kserve.io/v1alpha1
@@ -182,14 +182,14 @@ EOF
 
 The three routing plugins and their weights:
 
-* **`prefix-cache-scorer`** (weight 3): Routes requests to the backend with the highest KV cache match for this prompt prefix — the primary tail-latency reducer
+* **`prefix-cache-scorer`** (weight 3): Routes requests to the backend with the highest KV cache match for this prompt prefix  - the primary tail-latency reducer
 * **`queue-scorer`** (weight 2): Balances queue depth across replicas
 * **`active-request-scorer`** (weight 2): Considers in-flight request count
 
 === Monitor deployment progress
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 # Watch LLMInferenceService status
 oc get llminferenceservice llama-llm-d -w
@@ -197,14 +197,14 @@ oc get llminferenceservice llama-llm-d -w
 
 Wait for the status to show `Ready`. This takes a few minutes as each replica loads the model.
 
-image::llm-d-topology.png[]
+image::llm-d-topology.png[OpenShift topology view showing llm-d deployment with 4 backend pods,link=self,window=blank]
 
 === Verify llm-d is running
 
 Once the LLMInferenceService shows `Ready`, get the inference URL:
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 # Get the llm-d inference URL
 LLMD_URL=$(oc get llminferenceservice llama-llm-d -o jsonpath='{.status.url}')
@@ -257,7 +257,7 @@ Expected output:
 
 == Exercise 2: Run llm-d benchmark
 
-Run the **exact same GuideLLM configuration** as Modules 2 and 3—same prompts file, same concurrency levels—now targeting the llm-d gateway.
+Run the **exact same GuideLLM configuration** as Modules 2 and 3 -same prompts file, same concurrency levels -now targeting the llm-d gateway.
 
 **Goal**: Demonstrate that intelligent cache-aware routing dramatically reduces P95/P99 TTFT for the same workload on the same hardware.
 
@@ -270,7 +270,7 @@ You may want to press `Enter` occasionally to prevent the Showroom environment f
 ====
 
 [.console-input]
-[source,bash]
+[source,role="execute"]
 ----
 cat << EOF | oc apply -f-
 apiVersion: batch/v1
@@ -357,7 +357,9 @@ You may need to refresh your browser to see the `llama-3-1-8b-instruct-fp8` mode
 Watch the **KV cache hit rate** climb toward 90%+ as llm-d routes repeated prompts to the same backend.
 TTFT should drop significantly compared to Module 3.
 
-image::benchmark-dashboard-llm-d.png[]
+image::benchmark-dashboard-llm-d.png[Screenshot of the Grafana dashboard showing llm-d benchmark metrics with improved cache hit rates,link=self,window=blank]
+
+=== Verify
 
 When the benchmark finishes, focus on the **`ℹ Request Latency Statistics (Completed Requests)`** table.
 Example:
@@ -419,7 +421,7 @@ Concurrent @ 64:
 ----
 
 The TTFT improvement at concurrency 64 is striking: the median drops from 4.5 seconds to 245ms, and the p95 drops from 24 seconds to 478ms.
-At higher concurrency, more requests are in flight simultaneously—which gives the `prefix-cache-scorer` more opportunities to route repeat prompts to the replica that already has them cached.
+At higher concurrency, more requests are in flight simultaneously -which gives the `prefix-cache-scorer` more opportunities to route repeat prompts to the replica that already has them cached.
 The result is that llm-d's advantage *grows* as load increases, exactly the opposite of what naive scaling delivers.
 
 **Same hardware. Same workload. Same prompts file. The only difference is routing.**
@@ -433,7 +435,7 @@ The result is that llm-d's advantage *grows* as load increases, exactly the oppo
 
 **Key takeaway:**
 
-Same hardware. Same workload. Same prompts file. Intelligent routing cuts median TTFT from 4.5 seconds to 245ms at concurrency 64, and p95 from 24 seconds to 478ms—a 98% reduction.
+Same hardware. Same workload. Same prompts file. Intelligent routing cuts median TTFT from 4.5 seconds to 245ms at concurrency 64, and p95 from 24 seconds to 478ms -a 98% reduction.
 llm-d's advantage *grows* under higher load because more concurrent requests give the `prefix-cache-scorer` more opportunities to exploit cache locality.
 
 **Workshop complete!**

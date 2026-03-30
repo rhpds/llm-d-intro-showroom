@@ -1,13 +1,13 @@
 name: modules
 title: Introducing llm-d
 version: master
-start_page: workshop/llm-d/00-index.adoc
+start_page: index.adoc
 nav:
   - modules/ROOT/nav.adoc
 
 asciidoc:
   attributes:
-    lab_name: "I'm the lab_name var"
+    lab_name: "Introducing llm-d"
     release-version: master
     page-pagination: '@'
     my_var: "foo"
