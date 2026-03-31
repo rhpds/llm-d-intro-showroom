@@ -1,12 +1,12 @@
-= Workshop Complete
+= Workshop complete
 :source-highlighter: rouge
 :page-pagination!:
 
 Congratulations on completing the llm-d workshop!
 
-== What you demonstrated
+== What you've learned
 
-You proved that **intelligent cache-aware routing reduces tail latency** for your most frustrated users—using the same hardware and the same workload throughout:
+You proved that **intelligent cache-aware routing reduces tail latency** for your most frustrated users -using the same hardware and the same workload throughout:
 
 * **Single GPU baseline**: Established P95/P99 TTFT under concurrent load using a KV-cache-aware prompts file
 * **Naive 4 GPU scaling**: 4x more throughput capacity, but P95 tail latency improved only marginally due to cache misses from random routing
@@ -22,13 +22,11 @@ Prefix-aware routing with llm-d provides the most value when your workload has:
 * High concurrency where cache reuse matters at scale
 * Tail latency requirements that matter for customer experience
 
-== Continue learning
+== References
 
-Explore these resources to deepen your understanding:
-
-* **https://llm-d.ai/[llm-d project]** - Official documentation and community
-* **https://github.com/vllm-project/vllm[vLLM]** - The inference engine powering the backends
-* **https://github.com/vllm-project/guidellm/tree/main/docs[GuideLLM documentation]** - The benchmarking tool used in this workshop
+* https://llm-d.ai/[llm-d project^] - Official documentation and community
+* https://github.com/vllm-project/vllm[vLLM^] - The inference engine powering the backends
+* https://github.com/vllm-project/guidellm/tree/main/docs[GuideLLM documentation^] - The benchmarking tool used in this workshop
 
 == Feedback
 

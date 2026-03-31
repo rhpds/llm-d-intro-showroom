@@ -1,11 +1,11 @@
-= Introducing llm-d: Your Production-Ready Path to Scalable LLM Inference
+= Introducing llm-d: Your production-ready path to scalable LLM inference
 :source-highlighter: rouge
 :toc: macro
 :toclevels: 2
 
 toc::[]
 
-Welcome to the llm-d workshop! In the next 90 minutes you'll gain hands-on experience with production-ready distributed LLM inference that dramatically improves tail latency—the experience your most frustrated users see.
+Welcome to the llm-d workshop! In the next 90 minutes you'll gain hands-on experience with production-ready distributed LLM inference that dramatically improves tail latency -the experience your most frustrated users see.
 
 == Prerequisites
 
@@ -41,7 +41,7 @@ Open the OpenShift web console in your browser:
 
 Open the OpenShift AI Dashboard in your browser:
 
-* **RHOAI URL:** link:https://data-science-gateway.{openshift_cluster_ingress_domain}[https://data-science-gateway.{openshift_cluster_ingress_domain},window=_blank]
+* **Red Hat OpenShift AI (RHOAI) URL:** link:https://data-science-gateway.{openshift_cluster_ingress_domain}[https://data-science-gateway.{openshift_cluster_ingress_domain},window=_blank]
 * **Username:** {openshift_cluster_admin_username}
 * **Password:** {openshift_cluster_admin_password}
 
@@ -72,7 +72,7 @@ Throughout the workshop, you'll work on a realistic business problem:
 
 == Why tail latency matters
 
-**Tail latency (P95/P99)** represents the experience of your most frustrated users—the 5% or 1% who wait the longest for responses.
+**Tail latency (P95/P99)** represents the experience of your most frustrated users -the 5% or 1% who wait the longest for responses.
 
 Your "average" latency might look great, but if 5% of users experience 10x worse response times, you have unhappy customers filing support tickets and churning.
 
@@ -80,17 +80,17 @@ Your "average" latency might look great, but if 5% of users experience 10x worse
 
 == What you'll learn and demonstrate
 
-This workshop teaches you how to reduce P95 and P99 latency using llm-d—an intelligent orchestration layer that sits above vLLM and routes requests based on KV cache awareness.
+This workshop teaches you how to reduce P95 and P99 latency using llm-d -an intelligent orchestration layer that sits above vLLM and routes requests based on KV cache awareness.
 
-**Your goal**: Evaluate whether llm-d can deliver consistent, low-latency responses—especially for the users currently experiencing the worst performance (P95/P99).
+**Your goal**: Evaluate whether llm-d can deliver consistent, low-latency responses -especially for the users currently experiencing the worst performance (P95/P99).
 
 === Hands-on skills you'll gain
 
 By the end of this workshop, you'll be able to:
 
 * **Deploy and benchmark LLM inference** using vLLM, KServe, and OpenShift AI
-* **Measure tail latency scientifically** with benchmarking tools (P95, P99, TTFT)
-* **Identify latency bottlenecks** - prefill queuing, KV cache misses, queue depth variability
+* **Measure tail latency scientifically** with benchmarking tools (P95, P99, TTFT (Time to First Token))
+* **Identify latency bottlenecks** - prefill queuing, KV (Key-Value) cache misses, queue depth variability
 * **Compare scaling strategies** - naive horizontal scaling vs. intelligent cache-aware routing
 * **Deploy llm-d** with Precise Prefix Cache Aware Routing
 * **Quantify customer experience improvements** - connect P95/P99 reductions to user satisfaction
@@ -100,7 +100,7 @@ By the end of this workshop, you'll be able to:
 
 **Total duration**: 80 minutes 
 
-=== Module 1: Deploy Model & Core Concepts (20 minutes)
+=== Module 1: Introduction & core concepts (20 minutes)
 
 Deploy your first model and understand what causes tail latency:
 
@@ -112,17 +112,17 @@ Deploy your first model and understand what causes tail latency:
 
 **Outcome**: Working model deployment.
 
-=== Module 2: Observe Single-GPU Behaviour (20 minutes)
+=== Module 2: Observe single-GPU behaviour (20 minutes)
 
 See what happens when a single GPU gets overloaded:
 
 * Explore the vLLM Prometheus metrics endpoint and Grafana dashboard
 * Run a short 30-second GuideLLM benchmark to observe queue saturation
-* Note: these results are illustrative only—not used for comparison
+* Note: these results are illustrative only -not used for comparison
 
 **Outcome**: Understanding of how a single GPU saturates under concurrent load.
 
-=== Module 3: Scale vLLM & Establish Comparison Baseline (20 minutes)
+=== Module 3: Scale vLLM & establish comparison baseline (20 minutes)
 
 Scale to 4 replicas and run the proper comparison benchmark:
 
@@ -132,7 +132,7 @@ Scale to 4 replicas and run the proper comparison benchmark:
 
 **Outcome**: Recorded P95 TTFT baseline numbers to compare directly against Module 4.
 
-=== Module 4: Deploy llm-d & Benchmark (20 minutes)
+=== Module 4: Deploy llm-d & benchmark (20 minutes)
 
 Fix tail latency with intelligent cache-aware routing:
 
@@ -164,7 +164,7 @@ By the end of the workshop, you'll have:
 
 **"I've never used llm-d before. Will I be able to follow along?"**
 
-Yes! The workshop is designed for vLLM users who want to learn distributed inference. llm-d configuration is straightforward—you'll see it deploys in minutes.
+Yes! The workshop is designed for vLLM users who want to learn distributed inference. llm-d configuration is straightforward -you'll see it deploys in minutes.
 
 **"What if I get stuck during exercises?"**
 

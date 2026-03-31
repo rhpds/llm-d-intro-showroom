@@ -1,5 +1,9 @@
 ---
 type: showroom
+view_switcher:
+  enabled: true
+  default_mode: split
+persist_url_state: true
 tabs:
  - name: Terminal 1
    secondary_name: Terminal 2
