@@ -4,4 +4,5 @@
 * xref:workshop/llm-d/03-module-02.adoc[Module 2: Observe single-GPU behaviour]
 * xref:workshop/llm-d/04-module-03.adoc[Module 3: Scale vLLM & establish comparison baseline]
 * xref:workshop/llm-d/05-module-04.adoc[Module 4: Deploy llm-d & benchmark]
-* xref:workshop/llm-d/06-conclusion.adoc[Conclusion]
+* xref:workshop/llm-d/06-module-05.adoc[Module 5: Analyse benchmark results with AI-assisted coding]
+* xref:workshop/llm-d/07-conclusion.adoc[Conclusion]

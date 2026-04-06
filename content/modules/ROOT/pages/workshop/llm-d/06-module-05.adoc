@@ -1,0 +1,161 @@
+= Module 5: Analyse benchmark results with AI-assisted coding
+:source-highlighter: rouge
+:toc: macro
+:toclevels: 2
+
+In the previous modules you benchmarked both scaled vLLM and llm-d under identical conditions.
+The raw results are sitting on a shared volume -- now it's time to make sense of them.
+
+In this module you will use an **OpenShift AI workbench** pre-configured with VS Code and https://opencode.ai/[OpenCode^] (an open-source AI coding assistant) to write analysis code.
+OpenCode is connected to a **DeepSeek-R1** model, giving you an AI pair-programmer right inside your terminal.
+
+== Learning objectives
+
+* Open an OpenShift AI VS Code workbench
+* Use OpenCode to explore and understand the benchmark result files
+* Write Python analysis code with AI assistance
+* Generate a comparison HTML page showing the performance difference between scaled vLLM and llm-d
+
+== Exercise 1: Open the VS Code workbench
+
+Your lab environment includes a pre-provisioned VS Code workbench with the benchmark results already mounted.
+
+Navigate to the OpenShift AI dashboard:
+
+[.console-input]
+[source,role="execute"]
+----
+echo "https://$(oc get route rhods-dashboard -n redhat-ods-applications -o jsonpath='{.spec.host}')"
+----
+
+. Open the URL printed above in your browser
+. Log in with your OpenShift credentials (user: `{openshift_cluster_admin_username}`, password: `{openshift_cluster_admin_password}`)
+. Navigate to **Data Science Projects** -> **llm-d Project**
+. Click on the **benchmark-analysis** workbench to open VS Code
+
+== Exercise 2: Explore the benchmark results
+
+Once VS Code is open, launch a terminal (`Terminal` -> `New Terminal`).
+
+The benchmark results from the previous modules are mounted at `/opt/app-root/src/benchmark-data`. Explore the directory structure:
+
+[.console-input]
+[source,bash]
+----
+ls -la /opt/app-root/src/benchmark-data/results/
+----
+
+You should see two directories:
+
+[.console-output]
+[source,text]
+----
+drwxr-xr-x. 2 1000660000 root ... vllm-scaled
+drwxr-xr-x. 2 1000660000 root ... llm-d
+----
+
+Each directory contains the GuideLLM output files (JSON and CSV) from the benchmarks you ran in Modules 3 and 4.
+
+Take a look at what's inside:
+
+[.console-input]
+[source,bash]
+----
+ls /opt/app-root/src/benchmark-data/results/vllm-scaled/
+ls /opt/app-root/src/benchmark-data/results/llm-d/
+----
+
+== Exercise 3: Launch OpenCode
+
+OpenCode is pre-installed in your workbench. Start it from the terminal:
+
+[.console-input]
+[source,bash]
+----
+opencode
+----
+
+OpenCode is connected to a DeepSeek-R1 model running in the cluster. You can use it as an AI pair-programmer to help you write analysis code.
+
+== Exercise 4: Write analysis code with AI assistance
+
+Use OpenCode to write a Python script that:
+
+1. Reads the GuideLLM JSON results from both benchmark runs
+2. Extracts key metrics (TTFT median, P95, P99; request latency median, P95; throughput)
+3. Generates a comparison HTML page with tables and charts
+
+Here's a suggested prompt to get you started -- paste it into OpenCode:
+
+[.console-input]
+[source,text]
+----
+I have GuideLLM benchmark results in two directories:
+- /opt/app-root/src/benchmark-data/results/vllm-scaled/ (4-GPU vLLM with random load balancing)
+- /opt/app-root/src/benchmark-data/results/llm-d/ (4-GPU llm-d with prefix-cache-aware routing)
+
+Each directory contains JSON output from GuideLLM benchmarks run at concurrency levels 32 and 64.
+
+Write a Python script called analyze_benchmarks.py that:
+1. Reads the GuideLLM JSON result files from both directories
+2. Extracts these metrics for each concurrency level: TTFT (median, p95, p99), request latency (median, p95), and throughput
+3. Calculates the percentage improvement of llm-d over vLLM for each metric
+4. Generates a self-contained HTML file called comparison.html with:
+   - A summary table comparing all metrics side by side
+   - Highlights showing where llm-d outperforms vLLM
+   - A clear conclusion section
+
+Save the script to /opt/app-root/src/analyze_benchmarks.py
+----
+
+[TIP]
+====
+OpenCode will generate the code for you. Review it, ask follow-up questions, and iterate until you're happy with the output.
+This is a great opportunity to explore how AI-assisted coding works in practice!
+====
+
+== Exercise 5: Run the analysis and view results
+
+Once OpenCode has generated your script, run it:
+
+[.console-input]
+[source,bash]
+----
+python /opt/app-root/src/analyze_benchmarks.py
+----
+
+Then open the generated HTML file. In the VS Code terminal:
+
+[.console-input]
+[source,bash]
+----
+python -m http.server 8080 --directory /opt/app-root/src/ &
+echo "Open the VS Code 'Ports' tab and forward port 8080, then navigate to comparison.html"
+----
+
+Use the VS Code **Ports** tab to forward port 8080, then open the forwarded URL in your browser and append `/comparison.html` to view your results.
+
+[TIP]
+====
+If the initial output isn't exactly what you want, go back to OpenCode and refine it. For example:
+
+* _"Add bar charts comparing TTFT p95 across concurrency levels"_
+* _"Make the table show percentage improvements in green when llm-d is better"_
+* _"Add a section explaining what TTFT and tail latency mean for end users"_
+
+Iterating with AI assistance is part of the workflow!
+====
+
+== Module 5 summary
+
+**What you accomplished:**
+
+* Used an OpenShift AI workbench with VS Code and OpenCode (AI coding assistant)
+* Wrote Python analysis code with AI assistance from a DeepSeek-R1 model
+* Generated an HTML comparison page visualising the performance differences between scaled vLLM and llm-d
+
+**Key takeaway:**
+
+AI-assisted coding tools like OpenCode can accelerate data analysis tasks. Combined with OpenShift AI workbenches, they provide a productive environment for exploring and understanding ML infrastructure performance data.
+
+**Next: xref:workshop/llm-d/07-conclusion.adoc[Workshop conclusion]*
