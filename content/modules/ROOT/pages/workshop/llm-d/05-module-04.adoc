@@ -310,17 +310,16 @@ spec:
           volumeMounts:
             - name: cache
               mountPath: /tmp/hf-cache
-            - name: results
+            - name: benchmark-data
               mountPath: /results
-            - name: data
+              subPath: results/llm-d
+            - name: benchmark-data
               mountPath: /data
               readOnly: true
       volumes:
         - name: cache
           emptyDir: {}
-        - name: results
-          emptyDir: {}
-        - name: data
+        - name: benchmark-data
           persistentVolumeClaim:
             claimName: benchmark-data
 EOF
