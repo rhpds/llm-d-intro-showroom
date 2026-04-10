@@ -158,4 +158,4 @@ Iterating with AI assistance is part of the workflow!
 
 AI-assisted coding tools like OpenCode can accelerate data analysis tasks. Combined with OpenShift AI workbenches, they provide a productive environment for exploring and understanding ML infrastructure performance data.
 
-**Next: xref:workshop/llm-d/07-conclusion.adoc[Workshop conclusion]*
+**Next: xref:07-conclusion.adoc[Workshop conclusion]**

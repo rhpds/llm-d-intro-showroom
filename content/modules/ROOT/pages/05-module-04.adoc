@@ -333,12 +333,12 @@ Press `CTRL+C` when the job completes to return to the command prompt.
 [TIP]
 ====
 **If your terminal disconnects**, you can resume monitoring with:
-[source,bash]
+[source,role="execute"]
 ----
 oc logs -f job/guidellm-llm-d
 ----
 To check if the job has completed:
-[source,bash]
+[source,role="execute"]
 ----
 oc get job guidellm-llm-d
 ----
@@ -437,4 +437,4 @@ The result is that llm-d's advantage *grows* as load increases, exactly the oppo
 Same hardware. Same workload. Same prompts file. Intelligent routing cuts median TTFT from 4.5 seconds to 245ms at concurrency 64, and p95 from 24 seconds to 478ms -a 98% reduction.
 llm-d's advantage *grows* under higher load because more concurrent requests give the `prefix-cache-scorer` more opportunities to exploit cache locality.
 
-**Next: xref:workshop/llm-d/06-module-05.adoc[Module 5: Analyse benchmark results with AI-assisted coding]**
+**Next: xref:06-module-05.adoc[Module 5: Analyse benchmark results with AI-assisted coding]**

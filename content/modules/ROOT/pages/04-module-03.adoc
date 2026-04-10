@@ -284,12 +284,12 @@ Press `CTRL+C` when the job completes to return to the command prompt.
 [TIP]
 ====
 **If your terminal disconnects**, you can resume monitoring with:
-[source,bash]
+[source,role="execute"]
 ----
 oc logs -f job/guidellm-vllm-scaled
 ----
 To check if the job has completed:
-[source,bash]
+[source,role="execute"]
 ----
 oc get job guidellm-vllm-scaled
 ----
