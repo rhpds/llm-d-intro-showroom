@@ -94,7 +94,7 @@ I have GuideLLM benchmark results in two directories:
 - /opt/app-root/src/benchmark-data/results/vllm-scaled/ (4-GPU vLLM with random load balancing)
 - /opt/app-root/src/benchmark-data/results/llm-d/ (4-GPU llm-d with prefix-cache-aware routing)
 
-Each directory contains JSON output from GuideLLM benchmarks run at concurrency levels 32 and 64.
+Each directory contains JSON output from GuideLLM benchmarks runs
 
 Write a Python script called analyze_benchmarks.py that:
 1. Reads the GuideLLM JSON result files from both directories
