@@ -144,6 +144,16 @@ Fix tail latency with intelligent cache-aware routing:
 
 **Outcome**: Demonstrable proof that intelligent routing reduces tail latency for shared-prefix workloads.
 
+=== Module 5: Analyse benchmark results with AI-assisted coding (20 minutes)
+
+Use an AI coding assistant to analyse and visualise your benchmark data:
+
+* Open a pre-configured VS Code workbench in OpenShift AI
+* Use OpenCode (an AI coding assistant) to write Python analysis code
+* Generate an HTML comparison page showing the performance difference between scaled vLLM and llm-d
+
+**Outcome**: A self-contained HTML report comparing all benchmark metrics, built with AI-assisted coding.
+
 == What success looks like
 
 By the end of the workshop, you'll have:

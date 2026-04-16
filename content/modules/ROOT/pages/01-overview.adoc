@@ -47,5 +47,6 @@ Without intelligent routing, each GPU maintains its own isolated KV cache. Simil
 * **Module 2**: Short 30-second run on a single GPU -illustrative, not for comparison
 * **Module 3**: Full 300-second run on 4 GPUs with naive round-robin routing -your comparison baseline
 * **Module 4**: Full 300-second run on the same 4 GPUs with llm-d routing -measure the P95 TTFT improvement
+* **Module 5**: Use AI-assisted coding to analyse benchmark results and build a comparison report
 
-**Your job**: Generate the data and compare the numbers.
+**Your job**: Generate the data, compare the numbers, and build a visual report.
