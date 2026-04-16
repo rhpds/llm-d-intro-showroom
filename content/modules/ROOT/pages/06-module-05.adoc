@@ -25,12 +25,12 @@ Navigate to the OpenShift AI dashboard:
 [.console-input]
 [source,role="execute"]
 ----
-echo "https://$(oc get route rhods-dashboard -n redhat-ods-applications -o jsonpath='{.spec.host}')"
+echo "https://$(oc get route data-science-gateway -n openshift-ingress -o jsonpath='{.spec.host}')"
 ----
 
 . Open the URL printed above in your browser
 . Log in with your OpenShift credentials (user: `{openshift_cluster_admin_username}`, password: `{openshift_cluster_admin_password}`)
-. Navigate to **Data Science Projects** -> **llm-d Project**
+. Navigate to **Projects** -> **llm-d Project** -> **Workbenches**
 . Click on the **benchmark-analysis** workbench to open VS Code
 
 == Exercise 2: Explore the benchmark results
