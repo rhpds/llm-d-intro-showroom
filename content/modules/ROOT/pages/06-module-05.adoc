@@ -90,22 +90,67 @@ Here's a suggested prompt to get you started -- paste it into OpenCode:
 [.console-input]
 [source,text]
 ----
-I have GuideLLM benchmark results in two directories:
-- /opt/app-root/src/benchmark-data/results/vllm-scaled/ (4-GPU vLLM with random load balancing)
-- /opt/app-root/src/benchmark-data/results/llm-d/ (4-GPU llm-d with prefix-cache-aware routing)
+Compare these two files as TTFT benchmarks:
+- /opt/app-root/src/benchmark-data/results/llm-d/benchmarks.json = llm-d
+- /opt/app-root/src/benchmark-data/results/vllm-scaled/benchmarks.json = vllm
 
-Each directory contains JSON output from GuideLLM benchmarks runs
+Use `time_to_first_token_ms.successful` as TTFT.
 
-Write a Python script called analyze_benchmarks.py that:
-1. Reads the GuideLLM JSON result files from both directories
-2. Extracts these metrics for each concurrency level: TTFT (median, p95, p99), request latency (median, p95), and throughput
-3. Calculates the percentage improvement of llm-d over vLLM for each metric
-4. Generates a self-contained HTML file called comparison.html with:
-   - A summary table comparing all metrics side by side
-   - Highlights showing where llm-d outperforms vLLM
-   - A clear conclusion section
+Extract values from:
+benchmarks[0].metrics.time_to_first_token_ms.successful.percentiles
 
-Save the script to /opt/app-root/src/analyze_benchmarks.py
+Only use:
+- p50 (median)
+- p95
+- p99
+
+For each metric:
+1. report vllm value
+2. report llm-d value
+3. calculate difference in ms (llm-d - vllm)
+4. calculate percent difference relative to vllm
+5. state result:
+   - "improved" if llm-d is lower
+   - "regressed" if llm-d is higher
+
+Rules:
+- Lower TTFT is better
+- Do not use mean or other metrics
+- Do not assume improvement
+- Do not infer configuration or experimental setup
+- If a value is missing, say "not found"
+
+Return exactly:
+
+TTFT comparison
+
+p50
+- vllm: <value> ms
+- llm-d: <value> ms
+- Difference: <value> ms
+- Percent: <value>%
+- Result: <improved or regressed>
+
+p95
+- vllm: <value> ms
+- llm-d: <value> ms
+- Difference: <value> ms
+- Percent: <value>%
+- Result: <improved or regressed>
+
+p99
+- vllm: <value> ms
+- llm-d: <value> ms
+- Difference: <value> ms
+- Percent: <value>%
+- Result: <improved or regressed>
+
+Conclusion
+<1–2 sentences summarizing whether llm-d is better or worse across percentiles>
+
+Request-level check
+Request-level TTFT not evaluated.
+
 ----
 
 [TIP]
