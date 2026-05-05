@@ -1,3 +1,19 @@
+/* always show copy/paste buttons on code blocks */
+.doc .source-toolbox {
+  visibility: visible !important;
+}
+.doc .listingblock .source-toolbox {
+  visibility: visible !important;
+}
+.doc .listingblock:not(:hover) .source-toolbox {
+  visibility: visible !important;
+}
+
+/* hide "skip to content" link from theme */
+.skip-link {
+  display: none !important;
+}
+
 /* left align items inside imageblock */
 .doc .imageblock {
     align-items: flex-start;
