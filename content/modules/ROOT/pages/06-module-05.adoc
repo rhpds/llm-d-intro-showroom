@@ -1,4 +1,4 @@
-= Module 5: Analyse benchmark results with AI-assisted coding
+= Module 5: Analyze benchmark results with AI-assisted coding
 :source-highlighter: rouge
 :toc: macro
 :toclevels: 2
@@ -159,45 +159,13 @@ OpenCode will generate the code for you. Review it, ask follow-up questions, and
 This is a great opportunity to explore how AI-assisted coding works in practice!
 ====
 
-== Exercise 5: Run the analysis and view results
-
-Once OpenCode has generated your script, run it:
-
-[.console-input]
-[source,bash]
-----
-python /opt/app-root/src/analyze_benchmarks.py
-----
-
-Then open the generated HTML file. In the VS Code terminal:
-
-[.console-input]
-[source,bash]
-----
-python -m http.server 8080 --directory /opt/app-root/src/ &
-echo "Open the VS Code 'Ports' tab and forward port 8080, then navigate to comparison.html"
-----
-
-Use the VS Code **Ports** tab to forward port 8080, then open the forwarded URL in your browser and append `/comparison.html` to view your results.
-
-[TIP]
-====
-If the initial output isn't exactly what you want, go back to OpenCode and refine it. For example:
-
-* _"Add bar charts comparing TTFT p95 across concurrency levels"_
-* _"Make the table show percentage improvements in green when llm-d is better"_
-* _"Add a section explaining what TTFT and tail latency mean for end users"_
-
-Iterating with AI assistance is part of the workflow!
-====
 
 == Module 5 summary
 
 **What you accomplished:**
 
 * Used an OpenShift AI workbench with VS Code and OpenCode (AI coding assistant)
-* Wrote Python analysis code with AI assistance from a DeepSeek-R1 model
-* Generated an HTML comparison page visualising the performance differences between scaled vLLM and llm-d
+* Analysis code with AI assistance from a large language model
 
 **Key takeaway:**
 
