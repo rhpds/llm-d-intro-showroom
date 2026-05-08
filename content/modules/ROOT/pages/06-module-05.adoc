@@ -165,7 +165,7 @@ This is a great opportunity to explore how AI-assisted coding works in practice!
 **What you accomplished:**
 
 * Used an OpenShift AI workbench with VS Code and OpenCode (AI coding assistant)
-* Analysis code with AI assistance from a DeepSeek-R1 model
+* Analysis code with AI assistance from a large language model
 
 **Key takeaway:**
 
